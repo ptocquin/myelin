@@ -172,8 +172,12 @@ macro 'Count normals/anormals [c]' {
 	summarized();
 }
 
-macro 'Set All as Normal [N]' {
-	setAllAsNormal();
+macro 'Set All axon as Normal [N]' {
+	setAllAxonAsNormal();
+}
+
+macro 'Set All Mitochondrion as Normal [M]' {
+	setAllMitoAsNormal();
 }
 
 //macro 'Move ROI Action Tool (f7) - C000T4b12M' {
@@ -192,8 +196,8 @@ macro 'Single myelin Axons [f7]' {
 	singleMyelin();
 }
 
-function setAllAsNormal(){
-	if(getBoolean("All information about normal/anormal state will be cleared ?") == true){
+function setAllAxonAsNormal(){
+	if(getBoolean("All information about normal/anormal axon state will be cleared ?") == true){
 		n = roiManager("count");
 		for(j=0;j<n;j++){
 			roiManager("Select", j);
@@ -204,6 +208,24 @@ function setAllAsNormal(){
 				roiManager("Set Line Width", 2);
 			} else {
 				axonStatusNormal();
+			}
+		}
+		roiManager("deselect");
+	}
+}
+
+function setAllMitoAsNormal(){
+	if(getBoolean("All information about normal/anormal mitochondria state will be cleared ?") == true){
+		n = roiManager("count");
+		for(j=0;j<n;j++){
+			roiManager("Select", j);
+			name = Roi.getName;
+			if(matches(name,"axon_[0-9]{4}_.*") == true) { // les objets relatifs aux mesures des gaines ne sont pas comptés
+				Roi.setGroup(0);
+				roiManager("Set Color", "blue");
+				roiManager("Set Line Width", 2);
+			} else {
+				mitoStatusNormal();
 			}
 		}
 		roiManager("deselect");
